@@ -27,15 +27,16 @@ def main():
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, tr)
     viewer.add_object(o)
     
-    m = Mesh.load_obj('cube.obj')
-    m.normalize()
-    tr = Transformation3D()
-    tr.translation.y = -np.amin(m.vertices, axis=0)[1]
-    tr.translation.z = -10
-    tr.rotation_center.z = 0.2
-    texture = glutils.load_texture('mur.jpg')
-    o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, tr)
-    viewer.add_object(o)
+    for i in range(10):
+        m = Mesh.load_obj('mur.obj')
+        m.normalize()
+        tr = Transformation3D()
+        tr.translation.y = -np.amin(m.vertices, axis=0)[1]
+        tr.translation.z = -10+i
+        tr.rotation_center.z = 0.2
+        texture = glutils.load_texture('mur.jpg')
+        o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, tr)
+        viewer.add_object(o)
 
     m = Mesh()
     p0, p1, p2, p3 = [-25, 0, -25], [25, 0, -25], [25, 0, 25], [-25, 0, 25]
