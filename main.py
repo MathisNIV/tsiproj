@@ -27,15 +27,47 @@ def main():
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, tr)
     viewer.add_object(o)
     
+    
+    #chargement texture mur
+    m = Mesh.load_obj('mur.obj')
+    m.normalize()
+    texture = glutils.load_texture('mur.jpg')
+    vao = m.load_to_gpu()
+    
+    #mur droite
     for i in range(10):
-        m = Mesh.load_obj('mur.obj')
-        m.normalize()
         tr = Transformation3D()
         tr.translation.y = -np.amin(m.vertices, axis=0)[1]
-        tr.translation.z = -10+i
+        tr.translation.z = -10-i
+        tr.translation.x = +4
         tr.rotation_center.z = 0.2
-        texture = glutils.load_texture('mur.jpg')
-        o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, tr)
+        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
+        viewer.add_object(o)
+    for j in range(10):
+        tr = Transformation3D()
+        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+2
+        tr.translation.z = -10-j
+        tr.translation.x = +4
+        tr.rotation_center.z = 0.2
+        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
+        viewer.add_object(o)
+
+    #mur gauche
+    for i in range(10):
+        tr = Transformation3D()
+        tr.translation.y = -np.amin(m.vertices, axis=0)[1]
+        tr.translation.z = -10-i
+        tr.translation.x = -4
+        tr.rotation_center.z = 0.2
+        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
+        viewer.add_object(o)
+    for j in range(10):
+        tr = Transformation3D()
+        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+2
+        tr.translation.z = -10-j
+        tr.translation.x = -4
+        tr.rotation_center.z = 0.2
+        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
         viewer.add_object(o)
 
     m = Mesh()
@@ -44,7 +76,7 @@ def main():
     t0, t1, t2, t3 = [0, 0], [1, 0], [1, 1], [0, 1]
     m.vertices = np.array([[p0 + n + c + t0], [p1 + n + c + t1], [p2 + n + c + t2], [p3 + n + c + t3]], np.float32)
     m.faces = np.array([[0, 1, 2], [0, 2, 3]], np.uint32)
-    texture = glutils.load_texture('grass.jpg')
+    texture = glutils.load_texture('belle.jpg')
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D())
     viewer.add_object(o)
 
