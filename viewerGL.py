@@ -156,6 +156,7 @@ class ViewerGL:
             self.objs[-3].transformation.translation.z +=  150
                    
         # gestion mur
-        if self.objs[0].transformation.translation.z == self.objs[1].transformation.translation.z:
-            for i in range(150):
+        
+        for i in range(150):
+            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
                 self.objs[i].transformation.translation.z += 50
