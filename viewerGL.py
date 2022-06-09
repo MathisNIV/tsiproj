@@ -4,6 +4,7 @@ import OpenGL.GL as GL
 import glfw
 import pyrr
 import numpy as np
+import time
 from cpe3d import Object3D
 
 class ViewerGL:
@@ -97,10 +98,13 @@ class ViewerGL:
     def update_key(self):
         # commace joueur 
         if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0 and self.objs[0].transformation.translation.y < 4: # monter
-           # for self.objs[0].transformation.translation.y <= 2:
+            time.sleep(0.5)
+            while self.objs[0].transformation.translation.y < 3:
                 self.objs[0].transformation.translation += \
-                   pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
-                
+                    pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
+            self.objs[0].transformation.translation += \
+                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, -0.125, 0]))
+                    
         if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0 and self.objs[0].transformation.translation.y >1: # descendre
             self.objs[0].transformation.translation -= \
                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
