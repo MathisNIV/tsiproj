@@ -39,12 +39,15 @@ class ViewerGL:
             GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
 
             self.update_key()
+            #self.colision()
 
             for obj in self.objs:
                 GL.glUseProgram(obj.program)
                 if isinstance(obj, Object3D):
                     self.update_camera(obj.program)
                 obj.draw()
+                print(self.objs[0].transformation.translation.x)
+                print(self.objs[0].transformation.translation.y)
                 print(self.objs[0].transformation.translation.z)
             # changement de buffer d'affichage pour éviter un effet de scintillement
             glfw.swap_buffers(self.window)
@@ -96,10 +99,10 @@ class ViewerGL:
 
     def update_key(self):
         # commace joueur 
-        if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0: # monter
+        if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0 and self.objs[0].transformation.translation.y < 4: # monter
             self.objs[0].transformation.translation += \
                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
-        if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0: # descendre
+        if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0 and self.objs[0].transformation.translation.y >1: # descendre
             self.objs[0].transformation.translation -= \
                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
         if glfw.KEY_LEFT in self.touch and self.touch[glfw.KEY_LEFT] > 0: # gauche
@@ -120,7 +123,8 @@ class ViewerGL:
         self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1, 5])
 
         # gestion des mur
-        if self.objs[0].transformation.translation.z == 10:
-            self.objs[1].transformation.translation += \
-                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 20]))
- 
+        
+   # def colision(self):
+    #    if self.objs[0].transformation.translation.z == 24:
+     #       self.objs[1].transformation.translation += \
+      #          pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([20, 20, 20]))
