@@ -17,7 +17,7 @@ class ViewerGL:
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
         # création et paramétrage de la fenêtre
         glfw.window_hint(glfw.RESIZABLE, False)
-        self.window = glfw.create_window(1920, 1080, 'OpenGL', None, None)
+        self.window = glfw.create_window(960, 540, 'OpenGL', None, None)
         # paramétrage de la fonction de gestion des évènements
         glfw.set_key_callback(self.window, self.key_callback)
         # activation du context OpenGL pour la fenêtre
@@ -45,7 +45,7 @@ class ViewerGL:
                 if isinstance(obj, Object3D):
                     self.update_camera(obj.program)
                 obj.draw()
-
+                print(self.objs[0].transformation.translation.z)
             # changement de buffer d'affichage pour éviter un effet de scintillement
             glfw.swap_buffers(self.window)
             # gestion des évènements
@@ -143,3 +143,9 @@ class ViewerGL:
         self.cam.transformation.rotation_euler[pyrr.euler.index().yaw] += np.pi
         self.cam.transformation.rotation_center = self.objs[0].transformation.translation + self.objs[0].transformation.rotation_center
         self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1, 5])
+
+        # gestion des mur
+        if self.objs[0].transformation.translation.z == 10:
+            self.objs[1].transformation.translation += \
+                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 20]))
+ 
