@@ -96,22 +96,47 @@ class ViewerGL:
 
     def update_key(self):
         # commace joueur 
-        if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0: # monter
+        # if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0: # monter
+        #     self.objs[0].transformation.translation += \
+        #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
+
+        # if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0: # monter
+        #     self.objs[0].transformation.translation += \
+        #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
+        # if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0: # descendre
+        #     self.objs[0].transformation.translation -= \
+        #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
+        # if glfw.KEY_LEFT in self.touch and self.touch[glfw.KEY_LEFT] > 0: # gauche
+        #     self.objs[0].transformation.translation += \
+        #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0.125, 0, 0]))
+        # if glfw.KEY_RIGHT in self.touch and self.touch[glfw.KEY_RIGHT] > 0: # droite
+        #     self.objs[0].transformation.translation -= \
+        #          pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0.125, 0, 0]))
+
+#commande dev
+        if glfw.KEY_W in self.touch and self.touch[glfw.KEY_W] > 0:
             self.objs[0].transformation.translation += \
-                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
-        if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0: # descendre
+                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.25]))
+        if glfw.KEY_S in self.touch and self.touch[glfw.KEY_S] > 0:
             self.objs[0].transformation.translation -= \
-                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
-        if glfw.KEY_LEFT in self.touch and self.touch[glfw.KEY_LEFT] > 0: # gauche
-            self.objs[0].transformation.translation += \
-                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0.125, 0, 0]))
-        if glfw.KEY_RIGHT in self.touch and self.touch[glfw.KEY_RIGHT] > 0: # droite
-            self.objs[0].transformation.translation -= \
-                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0.125, 0, 0]))
+                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.25]))
+        if glfw.KEY_A in self.touch and self.touch[glfw.KEY_A] > 0:
+            self.objs[0].transformation.rotation_euler[pyrr.euler.index().yaw] -= 0.1
+        if glfw.KEY_D in self.touch and self.touch[glfw.KEY_D] > 0:
+            self.objs[0].transformation.rotation_euler[pyrr.euler.index().yaw] += 0.1
+
+        if glfw.KEY_I in self.touch and self.touch[glfw.KEY_I] > 0:
+            self.cam.transformation.rotation_euler[pyrr.euler.index().roll] -= 0.1
+        if glfw.KEY_K in self.touch and self.touch[glfw.KEY_K] > 0:
+            self.cam.transformation.rotation_euler[pyrr.euler.index().roll] += 0.1
+        if glfw.KEY_J in self.touch and self.touch[glfw.KEY_J] > 0:
+            self.cam.transformation.rotation_euler[pyrr.euler.index().yaw] -= 0.1
+        if glfw.KEY_L in self.touch and self.touch[glfw.KEY_L] > 0:
+            self.cam.transformation.rotation_euler[pyrr.euler.index().yaw] += 0.1
 
         # movement du personnage vers l'avant
-        self.objs[0].transformation.translation += \
-            pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.1]))
+        # self.objs[0].transformation.translation += \
+        #     pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.1]))
         
         # gestion de la caméra
         self.cam.transformation.rotation_euler = self.objs[0].transformation.rotation_euler.copy() 
