@@ -17,7 +17,7 @@ class ViewerGL:
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
         # création et paramétrage de la fenêtre
         glfw.window_hint(glfw.RESIZABLE, False)
-        self.window = glfw.create_window(1920, 1080, 'OpenGL', None, None)
+        self.window = glfw.create_window(1600, 900, 'OpenGL', None, None)
         # paramétrage de la fonction de gestion des évènements
         glfw.set_key_callback(self.window, self.key_callback)
         # activation du context OpenGL pour la fenêtre
@@ -146,14 +146,14 @@ class ViewerGL:
         if self.objs[0].transformation.translation.z - self.objs[-3].transformation.translation.z > 25:
             self.objs[-3].transformation.translation.z += 150
         # gestion des plateau2
-        if self.objs[0].transformation.translation.z - self.objs[-2].transformation.translation.z > 75:
+        if self.objs[0].transformation.translation.z - self.objs[-2].transformation.translation.z > 25:
             self.objs[-2].transformation.translation.z += 150
         # gestion des plateau3
-        if self.objs[0].transformation.translation.z - self.objs[-1].transformation.translation.z > 125:
+        if self.objs[0].transformation.translation.z - self.objs[-1].transformation.translation.z > 25:
             self.objs[-1].transformation.translation.z +=  150
                    
         # gestion mur
-        for i in range(150):
+        for i in range(151):
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
                 self.objs[i].transformation.translation.z += 50
 
