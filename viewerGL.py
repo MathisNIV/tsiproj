@@ -100,13 +100,15 @@ class ViewerGL:
     def update_key(self):
         # commace joueur 
         if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0 and self.objs[0].transformation.translation.y < 4: # monter
-            self.objs[0].transformation.translation += \
-                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
+           # for self.objs[0].transformation.translation.y <= 2:
+                self.objs[0].transformation.translation += \
+                   pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
+                
         if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0 and self.objs[0].transformation.translation.y >1: # descendre
             self.objs[0].transformation.translation -= \
                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
         if glfw.KEY_LEFT in self.touch and self.touch[glfw.KEY_LEFT] > 0: # gauche
-            self.objs[0].transformation.translation -= \
+            self.objs[0].transformation.translation += \
                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0.125, 0, 0]))
         if glfw.KEY_RIGHT in self.touch and self.touch[glfw.KEY_RIGHT] > 0: # droite
             self.objs[0].transformation.translation -= \
@@ -143,9 +145,11 @@ class ViewerGL:
         self.cam.transformation.rotation_center = self.objs[0].transformation.translation + self.objs[0].transformation.rotation_center
         self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1, 5])
 
-        # gestion des mur
-        
-   # def colision(self):
-    #    if self.objs[0].transformation.translation.z == 24:
-     #       self.objs[1].transformation.translation += \
-      #          pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([20, 20, 20]))
+        # gestion des plateau
+        if self.objs[0].transformation.translation.z == self.objs[-1].transformation.translation.z:
+            self.objs[-1].transformation.translation.z += 50
+          
+        # gestion mur
+        if self.objs[0].transformation.translation.z == self.objs[1].transformation.translation.z:
+            for i in range(150):
+                self.objs[i].transformation.translation.z += 50
