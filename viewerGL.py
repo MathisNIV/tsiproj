@@ -145,10 +145,16 @@ class ViewerGL:
         self.cam.transformation.rotation_center = self.objs[0].transformation.translation + self.objs[0].transformation.rotation_center
         self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1, 5])
 
-        # gestion des plateau
-        if self.objs[0].transformation.translation.z == self.objs[-1].transformation.translation.z:
-            self.objs[-1].transformation.translation.z += 50
-          
+        # gestion des plateau1
+        if self.objs[0].transformation.translation.z - self.objs[-1].transformation.translation.z > 25:
+            self.objs[-1].transformation.translation.z += 150
+        # gestion des plateau2
+        if self.objs[0].transformation.translation.z - self.objs[-2].transformation.translation.z > 75:
+            self.objs[-2].transformation.translation.z += 150
+        # gestion des plateau3
+        if self.objs[0].transformation.translation.z - self.objs[-3].transformation.translation.z > 125:
+            self.objs[-3].transformation.translation.z +=  150
+                   
         # gestion mur
         if self.objs[0].transformation.translation.z == self.objs[1].transformation.translation.z:
             for i in range(150):
