@@ -5,6 +5,7 @@ import glfw
 import pyrr
 import numpy as np
 from cpe3d import Object3D
+import random as random
 
 class ViewerGL:
     def __init__(self):
@@ -93,6 +94,7 @@ class ViewerGL:
         if (loc == -1) :
             print("Pas de variable uniforme : projection")
         GL.glUniformMatrix4fv(loc, 1, GL.GL_FALSE, self.cam.projection)
+    
 
     def update_key(self):
         # commace joueur 
@@ -153,7 +155,13 @@ class ViewerGL:
             self.objs[-1].transformation.translation.z +=  150
                    
         # gestion mur
-        for i in range(151):
+        for i in range(241):
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
-                self.objs[i].transformation.translation.z += 50
+                self.objs[i].transformation.translation.z += 80
+        #collision mur
+        print(self.objs[0].transformation.translation.x)
+        if self.objs[0].transformation.translation.x <= -2.25:
+            self.objs[0].transformation.translation.x = -2.25
+        elif self.objs[0].transformation.translation.x >= 2.25:
+            self.objs[0].transformation.translation.x = 2.25
 
