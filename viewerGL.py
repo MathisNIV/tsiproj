@@ -17,7 +17,7 @@ class ViewerGL:
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
         # création et paramétrage de la fenêtre
         glfw.window_hint(glfw.RESIZABLE, False)
-        self.window = glfw.create_window(960, 540, 'OpenGL', None, None)
+        self.window = glfw.create_window(1920, 1080, 'OpenGL', None, None)
         # paramétrage de la fonction de gestion des évènements
         glfw.set_key_callback(self.window, self.key_callback)
         # activation du context OpenGL pour la fenêtre
@@ -46,9 +46,6 @@ class ViewerGL:
                 if isinstance(obj, Object3D):
                     self.update_camera(obj.program)
                 obj.draw()
-                print(self.objs[0].transformation.translation.x)
-                print(self.objs[0].transformation.translation.y)
-                print(self.objs[0].transformation.translation.z)
             # changement de buffer d'affichage pour éviter un effet de scintillement
             glfw.swap_buffers(self.window)
             # gestion des évènements
@@ -146,17 +143,23 @@ class ViewerGL:
         self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1, 5])
 
         # gestion des plateau1
-        if self.objs[0].transformation.translation.z - self.objs[-1].transformation.translation.z > 25:
-            self.objs[-1].transformation.translation.z += 150
+        if self.objs[0].transformation.translation.z - self.objs[-3].transformation.translation.z > 25:
+            self.objs[-3].transformation.translation.z += 150
         # gestion des plateau2
         if self.objs[0].transformation.translation.z - self.objs[-2].transformation.translation.z > 75:
             self.objs[-2].transformation.translation.z += 150
         # gestion des plateau3
-        if self.objs[0].transformation.translation.z - self.objs[-3].transformation.translation.z > 125:
-            self.objs[-3].transformation.translation.z +=  150
+        if self.objs[0].transformation.translation.z - self.objs[-1].transformation.translation.z > 125:
+            self.objs[-1].transformation.translation.z +=  150
                    
         # gestion mur
+<<<<<<< HEAD
         
         for i in range(150):
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
                 self.objs[i].transformation.translation.z += 50
+=======
+        # if self.objs[0].transformation.translation.z == self.objs[1].transformation.translation.z:
+        #     for i in range(150):
+        #         self.objs[i].transformation.translation.z += 50
+>>>>>>> 03b8a168e8c307eb0c8e3423a818903c115186d5

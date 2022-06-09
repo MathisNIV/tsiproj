@@ -85,110 +85,6 @@ def main():
         tr.rotation_center.z = 0.2
         o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
         viewer.add_object(o)
-        
-    #mur droite2
-    for i in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]
-        tr.translation.z = 26+2*i
-        tr.translation.x = +4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-    for j in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+2
-        tr.translation.z = 26+2*j
-        tr.translation.x = +4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-    for j in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+4
-        tr.translation.z = 26+2*j
-        tr.translation.x = +4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-
-    #mur gauche2
-    for i in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]
-        tr.translation.z = 26+2*i
-        tr.translation.x = -4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-    for j in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+2
-        tr.translation.z = 26+2*j
-        tr.translation.x = -4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-    for j in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+4
-        tr.translation.z = 26+2*j
-        tr.translation.x = -4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-        
-    #mur droite3
-    for i in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]
-        tr.translation.z = 76+2*i
-        tr.translation.x = +4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-    for j in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+2
-        tr.translation.z = 76+2*j
-        tr.translation.x = +4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-    for j in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+4
-        tr.translation.z = 76+2*j
-        tr.translation.x = +4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-
-    #mur gauche3
-    for i in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]
-        tr.translation.z = 76+2*i
-        tr.translation.x = -4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-    for j in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+2
-        tr.translation.z = 76+2*j
-        tr.translation.x = -4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
-    for j in range(25):
-        tr = Transformation3D()
-        tr.translation.y = -np.amin(m.vertices, axis=0)[1]+4
-        tr.translation.z = 76+2*j
-        tr.translation.x = -4
-        tr.rotation_center.z = 0.2
-        o = Object3D(vao, m.get_nb_triangles(), program3d_id, texture, tr)
-        viewer.add_object(o)
 
 #plan sol
     m = Mesh()
@@ -200,9 +96,9 @@ def main():
     texture = glutils.load_texture('pavé.jpg')
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D())
     viewer.add_object(o)
-    o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D(translation=pyrr.Vector3([0, 0, 100])))
-    viewer.add_object(o)
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D(translation=pyrr.Vector3([0, 0, 50])))
+    viewer.add_object(o)
+    o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D(translation=pyrr.Vector3([0, 0, 100])))
     viewer.add_object(o)
 
     """ vao = Text.initalize_geometry()
