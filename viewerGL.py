@@ -6,6 +6,7 @@ import pyrr
 import numpy as np
 import time
 from cpe3d import Object3D
+import random as random
 
 class ViewerGL:
     def __init__(self):
@@ -94,17 +95,22 @@ class ViewerGL:
         if (loc == -1) :
             print("Pas de variable uniforme : projection")
         GL.glUniformMatrix4fv(loc, 1, GL.GL_FALSE, self.cam.projection)
+    
 
     def update_key(self):
         # commace joueur 
         if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0 and self.objs[0].transformation.translation.y < 4: # monter
-            time.sleep(0.5)
-            while self.objs[0].transformation.translation.y < 3:
-                self.objs[0].transformation.translation += \
-                    pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.125, 0]))
+            # tm = 1000
+            # td = 1000
+            # for i in range(tm):
+            #     self.objs[0].transformation.translation += \
+            #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.2, 0]))
+            # time.sleep(1)
+            # for i in range(td):
+            #     self.objs[0].transformation.translation -= \
+            #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.2, 0]))
             self.objs[0].transformation.translation += \
-                pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, -0.125, 0]))
-                    
+                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
         if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0 and self.objs[0].transformation.translation.y >1: # descendre
             self.objs[0].transformation.translation -= \
                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
@@ -157,7 +163,40 @@ class ViewerGL:
             self.objs[-1].transformation.translation.z +=  150
                    
         # gestion mur
-        for i in range(151):
+        for i in range(241):
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
-                self.objs[i].transformation.translation.z += 50
+                self.objs[i].transformation.translation.z += 80
+        #collision mur
+        print(self.objs[0].transformation.translation.x)
+        if self.objs[0].transformation.translation.x <= -2.25:
+            self.objs[0].transformation.translation.x = -2.25
+        elif self.objs[0].transformation.translation.x >= 2.25:
+            self.objs[0].transformation.translation.x = 2.25
 
+        #movement obstacle
+        for i in range(241,246):
+            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
+                self.objs[i].transformation.translation.z += 50 + random.randint(-1, 1)
+
+                if 0 < self.objs[i].transformation.translation.y < 4 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                    self.objs[i].transformation.translation.y += random.randint(-1, 1)
+                elif self.objs[i].transformation.translation.y == 4 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                   self.objs[i].transformation.translation.y += -random.randint(0, 4)
+                elif self.objs[i].transformation.translation.y == 0 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                    self.objs[i].transformation.translation.y += random.randint(0, 4)
+                   
+                if -3 < self.objs[i].transformation.translation.x < 3 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                    self.objs[i].transformation.translation.x += random.randint(-1, 1)
+                elif self.objs[i].transformation.translation.x == 3 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                   self.objs[i].transformation.translation.x += -1
+                elif self.objs[i].transformation.translation.x == -3 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                   self.objs[i].transformation.translation.x += 1
+                   
+        #collision obstacle
+        for i in range(241,246):
+            if self.objs[0].transformation.translation.z == self.objs[i].transformation.translation.z and self.objs[0].transformation.translation.y == self.objs[i].transformation.translation.y and self.objs[0].transformation.translation.x == self.objs[i].transformation.translation.x:
+                self.objs[0].transformation.translation.x = self.objs[i].transformation.translation.x
+                self.objs[0].transformation.translation.y = self.objs[i].transformation.translation.y
+                self.objs[0].transformation.translation.z = self.objs[i].transformation.translation.z
+        print("x",self.objs[242].transformation.translation.x)
+        print("y",self.objs[242].transformation.translation.y)
