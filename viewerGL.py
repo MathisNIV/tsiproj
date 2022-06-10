@@ -176,7 +176,9 @@ class ViewerGL:
         #movement obstacle
         for i in range(241,246):
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
-                self.objs[i].transformation.translation.z += 50 + random.randint(-1, 1)
+                mz = random.randint(-1, 1)
+                if self.objs[i].transformation.translation.z + mz != self.objs[i-1].transformation.translation.z:
+                    self.objs[i].transformation.translation.z += 50 + random.randint(-1, 1)
 
                 if 0 < self.objs[i].transformation.translation.y < 4 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
                     self.objs[i].transformation.translation.y += random.randint(-1, 1)
@@ -185,11 +187,11 @@ class ViewerGL:
                 elif self.objs[i].transformation.translation.y == 0 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
                     self.objs[i].transformation.translation.y += random.randint(0, 4)
                    
-                if -3 < self.objs[i].transformation.translation.x < 3 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                if -3 < self.objs[i].transformation.translation.x < 3 and self.objs[i].transformation.translation.x != self.objs[i-1].transformation.translation.x:
                     self.objs[i].transformation.translation.x += random.randint(-1, 1)
-                elif self.objs[i].transformation.translation.x == 3 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                elif self.objs[i].transformation.translation.x == 3 and self.objs[i].transformation.translation.x != self.objs[i-1].transformation.translation.x:
                    self.objs[i].transformation.translation.x += -1
-                elif self.objs[i].transformation.translation.x == -3 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
+                elif self.objs[i].transformation.translation.x == -3 and self.objs[i].transformation.translation.x != self.objs[i-1].transformation.translation.x:
                    self.objs[i].transformation.translation.x += 1
                    
         #collision obstacle
@@ -198,5 +200,6 @@ class ViewerGL:
                 self.objs[0].transformation.translation.x = self.objs[i].transformation.translation.x
                 self.objs[0].transformation.translation.y = self.objs[i].transformation.translation.y
                 self.objs[0].transformation.translation.z = self.objs[i].transformation.translation.z
+                
         print("x",self.objs[242].transformation.translation.x)
         print("y",self.objs[242].transformation.translation.y)
