@@ -41,7 +41,10 @@ class ViewerGL:
             GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
 
             self.update_key()
-            #self.colision()
+            self.camera()
+            self.plateau()
+            self.mur()
+            self.obstacle()
 
             for obj in self.objs:
                 GL.glUseProgram(obj.program)
@@ -104,11 +107,11 @@ class ViewerGL:
             # td = 1000
             # for i in range(tm):
             #     self.objs[0].transformation.translation += \
-            #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.2, 0]))
-            # time.sleep(1)
+            #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.001, 0]))
+            # time.sleep(0.5)
             # for i in range(td):
             #     self.objs[0].transformation.translation -= \
-            #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.2, 0]))
+            #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.001, 0]))
             self.objs[0].transformation.translation += \
                  pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
         if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0 and self.objs[0].transformation.translation.y >1: # descendre
@@ -145,13 +148,13 @@ class ViewerGL:
         # movement du personnage vers l'avant
         # self.objs[0].transformation.translation += \
         #     pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.1]))
-        
+    def camera(self): 
         # gestion de la caméra
         self.cam.transformation.rotation_euler = self.objs[0].transformation.rotation_euler.copy() 
         self.cam.transformation.rotation_euler[pyrr.euler.index().yaw] += np.pi
         self.cam.transformation.rotation_center = self.objs[0].transformation.translation + self.objs[0].transformation.rotation_center
-        self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1, 5])
-
+        self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1.2, 5])
+    def plateau(self):
         # gestion des plateau1
         if self.objs[0].transformation.translation.z - self.objs[-3].transformation.translation.z > 25:
             self.objs[-3].transformation.translation.z += 150
@@ -161,7 +164,7 @@ class ViewerGL:
         # gestion des plateau3
         if self.objs[0].transformation.translation.z - self.objs[-1].transformation.translation.z > 25:
             self.objs[-1].transformation.translation.z +=  150
-                   
+    def mur(self):               
         # gestion mur
         for i in range(241):
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
@@ -171,7 +174,7 @@ class ViewerGL:
             self.objs[0].transformation.translation.x = -2.25
         elif self.objs[0].transformation.translation.x >= 2.25:
             self.objs[0].transformation.translation.x = 2.25
-
+    def obstacle(self):
         #movement obstacle
         for i in range(241,246):
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
@@ -195,6 +198,7 @@ class ViewerGL:
                    
         #collision obstacle
         for i in range(241,246):
+<<<<<<< HEAD
             if self.objs[0].transformation.translation.z >= self.objs[i].transformation.translation.z-2 and self.objs[0].transformation.translation.z <= self.objs[i].transformation.translation.z-1.8 :
                 print('bite')
                 if self.objs[i].transformation.translation.x-2<self.objs[0].transformation.translation.x<self.objs[i].transformation.translation.x+2:
@@ -202,3 +206,12 @@ class ViewerGL:
         # print(self.objs[0].transformation.translation.x)
         # print(self.objs[0].transformation.translation.y)
         # print(self.objs[0].transformation.translation.z)
+=======
+            if self.objs[0].transformation.translation.z == self.objs[i].transformation.translation.z and self.objs[0].transformation.translation.y == self.objs[i].transformation.translation.y and self.objs[0].transformation.translation.x == self.objs[i].transformation.translation.x:
+                self.objs[0].transformation.translation.x = self.objs[i].transformation.translation.x
+                self.objs[0].transformation.translation.y = self.objs[i].transformation.translation.y
+                self.objs[0].transformation.translation.z = self.objs[i].transformation.translation.z
+                
+        print("x",self.objs[0].transformation.translation.x)
+        print("y",self.objs[0].transformation.translation.y)
+>>>>>>> 0c8bfca0a1365d68654cf9f4ef416805c7d110a6
