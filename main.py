@@ -9,7 +9,7 @@ import random
 
 def main():
     viewer = ViewerGL()
-
+    gameover=False
     viewer.set_camera(Camera())
     viewer.cam.transformation.translation.y = 2
     viewer.cam.transformation.rotation_center = viewer.cam.transformation.translation.copy()
@@ -111,16 +111,16 @@ def main():
     viewer.add_object(o)
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D(translation=pyrr.Vector3([0, 0, 100])))
     viewer.add_object(o)
-
-    """ vao = Text.initalize_geometry()
-    texture = glutils.load_texture('fontB.jpg')
-    o = Text('Bonjour les', np.array([-0.8, 0.3], np.float32), np.array([0.8, 0.8], np.float32), vao, 2, programGUI_id, texture)
-    viewer.add_object(o)
-    o = Text('3ETI', np.array([-0.5, -0.2], np.float32), np.array([0.5, 0.3], np.float32), vao, 2, programGUI_id, texture)
-    viewer.add_object(o) """
+    
+    if gameover == True:
+        vao = Text.initalize_geometry()
+        texture = glutils.load_texture('fontB.jpg')
+        o = Text('game', np.array([-0.8, 0.3], np.float32), np.array([0.8, 0.8], np.float32), vao, 2, programGUI_id, texture)
+        viewer.add_object(o)
+        o = Text('over', np.array([-0.5, -0.2], np.float32), np.array([0.5, 0.3], np.float32), vao, 2, programGUI_id, texture)
+        viewer.add_object(o)
 
     viewer.run()
-
-
+    
 if __name__ == '__main__':
     main()

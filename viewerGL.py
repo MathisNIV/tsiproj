@@ -33,28 +33,33 @@ class ViewerGL:
 
         self.objs = []
         self.touch = {}
+        self.go=0
+        self.game = True
 
     def run(self):
         # boucle d'affichage
         while not glfw.window_should_close(self.window):
-            # nettoyage de la fenêtre : fond et profondeur
-            GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+                # nettoyage de la fenêtre : fond et profondeur
+                GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
+                if self.game ==True:
+                    self.update_key()
+                    self.camera()
+                    self.plateau()
+                    self.mur()
+                    self.obstacle()
+                    #self.GameOver()
+                else:
+                    print('perdu')
 
-            self.update_key()
-            self.camera()
-            self.plateau()
-            self.mur()
-            self.obstacle()
-
-            for obj in self.objs:
-                GL.glUseProgram(obj.program)
-                if isinstance(obj, Object3D):
-                    self.update_camera(obj.program)
-                obj.draw()
-            # changement de buffer d'affichage pour éviter un effet de scintillement
-            glfw.swap_buffers(self.window)
-            # gestion des évènements
-            glfw.poll_events()
+                for obj in self.objs:
+                    GL.glUseProgram(obj.program)
+                    if isinstance(obj, Object3D):
+                        self.update_camera(obj.program)
+                    obj.draw()
+                # changement de buffer d'affichage pour éviter un effet de scintillement
+                glfw.swap_buffers(self.window)
+                # gestion des évènements
+                glfw.poll_events()
         
     def key_callback(self, win, key, scancode, action, mods):
         # sortie du programme si appui sur la touche 'échappement'
@@ -156,14 +161,14 @@ class ViewerGL:
         self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1.2, 5])
     def plateau(self):
         # gestion des plateau1
-        if self.objs[0].transformation.translation.z - self.objs[-3].transformation.translation.z > 25:
-            self.objs[-3].transformation.translation.z += 150
+        if self.objs[0].transformation.translation.z - self.objs[-5].transformation.translation.z > 25:
+            self.objs[-5].transformation.translation.z += 150
         # gestion des plateau2
-        if self.objs[0].transformation.translation.z - self.objs[-2].transformation.translation.z > 25:
-            self.objs[-2].transformation.translation.z += 150
+        if self.objs[0].transformation.translation.z - self.objs[-4].transformation.translation.z > 25:
+            self.objs[-4].transformation.translation.z += 150
         # gestion des plateau3
-        if self.objs[0].transformation.translation.z - self.objs[-1].transformation.translation.z > 25:
-            self.objs[-1].transformation.translation.z +=  150
+        if self.objs[0].transformation.translation.z - self.objs[-3].transformation.translation.z > 25:
+            self.objs[-3].transformation.translation.z +=  150
     def mur(self):               
         # gestion mur
         for i in range(241):
@@ -202,3 +207,12 @@ class ViewerGL:
                 if self.objs[i].transformation.translation.x-1.5 < self.objs[0].transformation.translation.x < self.objs[i].transformation.translation.x+1.5:
                     if self.objs[i].transformation.translation.y-2<self.objs[0].transformation.translation.y<self.objs[i].transformation.translation.y+2:
                         self.objs[0].transformation.translation.z = self.objs[i].transformation.translation.z-2
+                        self.game=False
+                        # print('avant',self.go)
+                        # self.go +=1
+                        # print('apres',self.go)
+        
+    # def GameOver(self):
+    #     print(self.go,'fonction game over')
+    #     if self.go>=50:
+    #         self.game = False
