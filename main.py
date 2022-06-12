@@ -16,7 +16,7 @@ def main():
 
     program3d_id = glutils.create_program_from_file('shader.vert', 'shader.frag')
     programGUI_id = glutils.create_program_from_file('gui.vert', 'gui.frag')
-
+    
     m = Mesh.load_obj('among.obj')
     m.normalize()
     m.apply_matrix(pyrr.matrix44.create_from_scale([1, 1, 1, 1]))
@@ -89,7 +89,7 @@ def main():
 
     #obstacle
     for j in range(5):
-        tr = Transformation3D()
+        tr = Transformation3D()        
         tr.translation.y = -np.amin(m.vertices, axis=0)[1] + random.randint(0, 4)
         tr.translation.z = 2*j + random.randint(0, 24)
         tr.translation.x = random.randint(-3, 3)

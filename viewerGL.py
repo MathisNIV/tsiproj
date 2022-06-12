@@ -198,10 +198,11 @@ class ViewerGL:
                    
         #collision obstacle
         for i in range(241,246):
-            if self.objs[0].transformation.translation.z >= self.objs[i].transformation.translation.z-2 and self.objs[0].transformation.translation.z <= self.objs[i].transformation.translation.z-1.8 :
-                print('bite')
-                if self.objs[i].transformation.translation.x-2<self.objs[0].transformation.translation.x<self.objs[i].transformation.translation.x+2:
-                    self.objs[0].transformation.translation.z =self.objs[i].transformation.translation.z-2
+
         # print(self.objs[0].transformation.translation.x)
         # print(self.objs[0].transformation.translation.y)
         # print(self.objs[0].transformation.translation.z)
+            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z+2>=0 and self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z+2 <= 0.3 :
+                if self.objs[i].transformation.translation.x-1.5 < self.objs[0].transformation.translation.x < self.objs[i].transformation.translation.x+1.5:
+                    if self.objs[i].transformation.translation.y-2<self.objs[0].transformation.translation.y<self.objs[i].transformation.translation.y+2:
+                        self.objs[0].transformation.translation.z = self.objs[i].transformation.translation.z-2
