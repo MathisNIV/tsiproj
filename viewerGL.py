@@ -170,7 +170,6 @@ class ViewerGL:
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
                 self.objs[i].transformation.translation.z += 80
         #collision mur
-        print(self.objs[0].transformation.translation.x)
         if self.objs[0].transformation.translation.x <= -2.25:
             self.objs[0].transformation.translation.x = -2.25
         elif self.objs[0].transformation.translation.x >= 2.25:
@@ -199,10 +198,10 @@ class ViewerGL:
                    
         #collision obstacle
         for i in range(241,246):
-            if self.objs[0].transformation.translation.z == self.objs[i].transformation.translation.z and self.objs[0].transformation.translation.y == self.objs[i].transformation.translation.y and self.objs[0].transformation.translation.x == self.objs[i].transformation.translation.x:
-                self.objs[0].transformation.translation.x = self.objs[i].transformation.translation.x
-                self.objs[0].transformation.translation.y = self.objs[i].transformation.translation.y
-                self.objs[0].transformation.translation.z = self.objs[i].transformation.translation.z
-                
-        print("x",self.objs[0].transformation.translation.x)
-        print("y",self.objs[0].transformation.translation.y)
+            if self.objs[0].transformation.translation.z >= self.objs[i].transformation.translation.z-2 and self.objs[0].transformation.translation.z <= self.objs[i].transformation.translation.z-1.8 :
+                print('bite')
+                if self.objs[i].transformation.translation.x-2<self.objs[0].transformation.translation.x<self.objs[i].transformation.translation.x+2:
+                    self.objs[0].transformation.translation.z =self.objs[i].transformation.translation.z-2
+        # print(self.objs[0].transformation.translation.x)
+        # print(self.objs[0].transformation.translation.y)
+        # print(self.objs[0].transformation.translation.z)
