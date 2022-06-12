@@ -89,7 +89,7 @@ def main():
 
     #obstacle
     for j in range(5):
-        tr = Transformation3D()
+        tr = Transformation3D()        
         tr.translation.y = -np.amin(m.vertices, axis=0)[1] + random.randint(0, 4)
         tr.translation.z = 2*j + random.randint(0, 24)
         tr.translation.x = random.randint(-3, 3)
