@@ -5,8 +5,10 @@ import glfw
 import pyrr
 import numpy as np
 import time
-from cpe3d import Object3D
 import random as random
+import glutils
+from mesh import Mesh
+from cpe3d import Object3D, Camera, Transformation3D, Text
 
 class ViewerGL:
     def __init__(self):
@@ -36,8 +38,10 @@ class ViewerGL:
         self.go=0
         self.game = True
 
-    def run(self):
+    def run(self,viewer,programGUI_id):
         # boucle d'affichage
+        vao = Text.initalize_geometry()
+        texture = glutils.load_texture('fontB.jpg')
         while not glfw.window_should_close(self.window):
                 # nettoyage de la fenêtre : fond et profondeur
                 GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
@@ -60,6 +64,12 @@ class ViewerGL:
                 glfw.swap_buffers(self.window)
                 # gestion des évènements
                 glfw.poll_events()
+                
+                if self.game == False:
+                    o = Text('game', np.array([-0.8, 0.3], np.float32), np.array([0.8, 0.8], np.float32), vao, 2, programGUI_id, texture)
+                    viewer.add_object(o)
+                    o = Text('over', np.array([-0.5, -0.2], np.float32), np.array([0.5, 0.3], np.float32), vao, 2, programGUI_id, texture)
+                    viewer.add_object(o)
         
     def key_callback(self, win, key, scancode, action, mods):
         # sortie du programme si appui sur la touche 'échappement'
@@ -129,7 +139,7 @@ class ViewerGL:
             self.objs[0].transformation.translation -= \
                  pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0.125, 0, 0]))
 
-#commande dev
+        #commande dev
         if glfw.KEY_W in self.touch and self.touch[glfw.KEY_W] > 0:
             self.objs[0].transformation.translation += \
                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.25]))
