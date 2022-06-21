@@ -108,10 +108,13 @@ def main():
     texture = glutils.load_texture('pavé.jpg')
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D())# premier plan
     viewer.add_object(o) # ajoute des mu à la liste obljet à la position -5
+    print('1',o)
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D(translation=pyrr.Vector3([0, 0, 50])))#deuxième plan
     viewer.add_object(o) # ajoute des mu à la liste obljet à la position -4
+    print('2',o)
     o = Object3D(m.load_to_gpu(), m.get_nb_triangles(), program3d_id, texture, Transformation3D(translation=pyrr.Vector3([0, 0, 100])))#troisième plan
     viewer.add_object(o) # ajoute des mu à la liste obljet à la position -3
+    print('3',o)
 
     viewer.run(viewer,programGUI_id)
     

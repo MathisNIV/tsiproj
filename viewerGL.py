@@ -34,16 +34,16 @@ class ViewerGL:
         print(f"OpenGL: {GL.glGetString(GL.GL_VERSION).decode('ascii')}")
 
         self.objs = []
+        self.Go = []
         self.touch = {}
         self.go=0
         self.game = False
         self.dz = 0
         self.time = time.time()
+        self.cpt_saut = 0
 
     def run(self,viewer,programGUI_id):
         # boucle d'affichage
-        vao = Text.initalize_geometry()
-        texture = glutils.load_texture('fontB.jpg')
         self.time = time.time()
 
         while not glfw.window_should_close(self.window):
@@ -56,12 +56,15 @@ class ViewerGL:
                     self.mur()
                     self.obstacle()
                     self.GameOver()
+                    
                 else:
-                    self.GameOver()
-                    self.objs[-1].transformation.translation.z == self.objs[0].transformation.translation.z
-                    self.objs[-1].transformation.translation.z == self.objs[0].transformation.translation.z
+                    vao = Text.initalize_geometry()
+                    texture = glutils.load_texture('fontB.jpg')
+                    o = Text('game', np.array([-0.8, 0.3], np.float32), np.array([0.8, 0.8], np.float32), vao, 2, programGUI_id, texture)
+                    viewer.add_object_go(o)
+                    o = Text('over', np.array([-0.5, -0.2], np.float32), np.array([0.5, 0.3], np.float32), vao, 2, programGUI_id, texture)
+                    viewer.add_object_go(o)
 
-                    print("perdu")
                     
                 for obj in self.objs:
                     GL.glUseProgram(obj.program)
@@ -72,21 +75,21 @@ class ViewerGL:
                 glfw.swap_buffers(self.window)
                 # gestion des évènements
                 glfw.poll_events()
-                
-                if self.game == False:
-                    o = Text('game', np.array([-0.8, 0.3], np.float32), np.array([0.8, 0.8], np.float32), vao, 2, programGUI_id, texture)
-                    viewer.add_object(o)
-                    o = Text('over', np.array([-0.5, -0.2], np.float32), np.array([0.5, 0.3], np.float32), vao, 2, programGUI_id, texture)
-                    viewer.add_object(o)
+
         
     def key_callback(self, win, key, scancode, action, mods):
         # sortie du programme si appui sur la touche 'échappement'
         if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
             glfw.set_window_should_close(win, glfw.TRUE)
+        if key == glfw.KEY_SPACE and action == glfw.PRESS:
+            self.cpt_saut = 100
         self.touch[key] = action
     
     def add_object(self, obj):
         self.objs.append(obj)
+        
+    def add_object_go(self, obj):
+        self.Go.append(obj)
 
     def set_camera(self, cam):
         self.cam = cam
@@ -124,19 +127,16 @@ class ViewerGL:
     
 
     def update_key(self):
-        # commace joueur 
-        if glfw.KEY_SPACE in self.touch and self.touch[glfw.KEY_SPACE] > 0 and self.objs[0].transformation.translation.y < 4: # monter
-            # tm = 1000
-            # td = 1000
-            # for i in range(tm):
-            #     self.objs[0].transformation.translation += \
-            #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.001, 0]))
-            # time.sleep(0.5)
-            # for i in range(td):
-            #     self.objs[0].transformation.translation -= \
-                    # pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.001, 0]))
-            self.objs[0].transformation.translation += \
-                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
+        # commande joueur
+        
+        #gestion du saut
+        if self.cpt_saut > 50:
+            self.objs[0].transformation.translation.y +=0.25
+            self.cpt_saut -= 3
+        elif self.cpt_saut > 0:
+            self.objs[0].transformation.translation.y -= 0.25
+            self.cpt_saut -= 3
+            
         if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0 and self.objs[0].transformation.translation.y >1: # descendre
             self.objs[0].transformation.translation -= \
                 pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
@@ -183,14 +183,14 @@ class ViewerGL:
         self.cam.transformation.translation = self.objs[0].transformation.translation + pyrr.Vector3([0, 1.2, 5])
     def plateau(self):
         # gestion des plateau1
-        if self.objs[0].transformation.translation.z - self.objs[-5].transformation.translation.z > 25:
-            self.objs[-5].transformation.translation.z += 150
-        # gestion des plateau2
-        if self.objs[0].transformation.translation.z - self.objs[-4].transformation.translation.z > 25:
-            self.objs[-4].transformation.translation.z += 150
-        # gestion des plateau3
         if self.objs[0].transformation.translation.z - self.objs[-3].transformation.translation.z > 25:
-            self.objs[-3].transformation.translation.z +=  150
+            self.objs[-3].transformation.translation.z += 150
+        # gestion des plateau2
+        if self.objs[0].transformation.translation.z - self.objs[-2].transformation.translation.z > 25:
+            self.objs[-2].transformation.translation.z += 150
+        # gestion des plateau3
+        if self.objs[0].transformation.translation.z - self.objs[-1].transformation.translation.z > 25:
+            self.objs[-1].transformation.translation.z +=  150
     def mur(self):               
         # gestion mur
         for i in range(241):
@@ -226,20 +226,13 @@ class ViewerGL:
                    
         #collision obstacle
         for i in range(241,246):
-
-        # print(self.objs[0].transformation.translation.x)
-        # print(self.objs[0].transformation.translation.y)
-        # print(self.objs[0].transformation.translation.z)
-            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z+2>=0 and self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z+2 <= 0.3 :
+            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z+2>=0 and self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z+2 <= 0.4 :
                 if self.objs[i].transformation.translation.x-1.5 < self.objs[0].transformation.translation.x < self.objs[i].transformation.translation.x+1.5:
                     if self.objs[i].transformation.translation.y-2<self.objs[0].transformation.translation.y<self.objs[i].transformation.translation.y+2:
                         self.objs[0].transformation.translation.z = self.objs[i].transformation.translation.z-2
                         self.game=False
-                        print('avant',self.go)
                         self.go +=1
-                        print('apres',self.go)
         
     def GameOver(self):
-        # print(self.go,'fonction game over')
-        if self.go>=50:
+        if self.go>=25:
             self.game = True
