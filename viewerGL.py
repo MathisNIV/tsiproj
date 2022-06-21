@@ -35,9 +35,12 @@ class ViewerGL:
         self.touch = {}
         self.go=0
         self.game = False
+        self.dz = 0
+        self.time = time.time()
 
     def run(self):
         # boucle d'affichage
+        self.time = time.time()
         while not glfw.window_should_close(self.window):
                 # nettoyage de la fenêtre : fond et profondeur
                 GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
@@ -155,8 +158,12 @@ class ViewerGL:
             self.cam.transformation.rotation_euler[pyrr.euler.index().yaw] += 0.1
 
         # movement du personnage vers l'avant
-        # self.objs[0].transformation.translation += \
-        #     pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.25]))
+        if time.time() - self.time > 1: # permet de compter une seconde
+            self.time = time.time()
+            self.dz += 0.01 # augmente la vitesse de déplacement vers l'avant de 0.01
+        self.objs[0].transformation.translation += \
+            pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.25 + self.dz]))
+
     def camera(self): 
         # gestion de la caméra
         self.cam.transformation.rotation_euler = self.objs[0].transformation.rotation_euler.copy() 
@@ -186,18 +193,19 @@ class ViewerGL:
     def obstacle(self):
         #movement obstacle
         for i in range(241,246):
-            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
+            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 5:
+                #nouvelle position sur z
                 mz = random.randint(-1, 1)
                 if self.objs[i].transformation.translation.z + mz != self.objs[i-1].transformation.translation.z:
-                    self.objs[i].transformation.translation.z += 50 + random.randint(-1, 1)
-
+                    self.objs[i].transformation.translation.z += 50 + random.randint(-5, 0)
+                #nouvelle position sur y
                 if 0 < self.objs[i].transformation.translation.y < 4 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
                     self.objs[i].transformation.translation.y += random.randint(-1, 1)
                 elif self.objs[i].transformation.translation.y == 4 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
                    self.objs[i].transformation.translation.y += -random.randint(0, 4)
                 elif self.objs[i].transformation.translation.y == 0 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
                     self.objs[i].transformation.translation.y += random.randint(0, 4)
-                   
+                #nouvelle position sur x         
                 if -3 < self.objs[i].transformation.translation.x < 3 and self.objs[i].transformation.translation.x != self.objs[i-1].transformation.translation.x:
                     self.objs[i].transformation.translation.x += random.randint(-1, 1)
                 elif self.objs[i].transformation.translation.x == 3 and self.objs[i].transformation.translation.x != self.objs[i-1].transformation.translation.x:
