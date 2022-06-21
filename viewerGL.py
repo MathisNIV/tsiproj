@@ -21,7 +21,7 @@ class ViewerGL:
         glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
         # création et paramétrage de la fenêtre
         glfw.window_hint(glfw.RESIZABLE, False)
-        self.window = glfw.create_window(1600, 900, 'OpenGL', None, None)
+        self.window = glfw.create_window(960, 540, 'OpenGL', None, None)
         # paramétrage de la fonction de gestion des évènements
         glfw.set_key_callback(self.window, self.key_callback)
         # activation du context OpenGL pour la fenêtre
@@ -36,25 +36,33 @@ class ViewerGL:
         self.objs = []
         self.touch = {}
         self.go=0
-        self.game = True
+        self.game = False
+        self.dz = 0
+        self.time = time.time()
 
     def run(self,viewer,programGUI_id):
         # boucle d'affichage
         vao = Text.initalize_geometry()
         texture = glutils.load_texture('fontB.jpg')
+        self.time = time.time()
+
         while not glfw.window_should_close(self.window):
                 # nettoyage de la fenêtre : fond et profondeur
                 GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
-                if self.game ==True:
+                if self.game == False:
                     self.update_key()
                     self.camera()
                     self.plateau()
                     self.mur()
                     self.obstacle()
-                    #self.GameOver()
+                    self.GameOver()
                 else:
-                    print('perdu')
+                    self.GameOver()
+                    self.objs[-1].transformation.translation.z == self.objs[0].transformation.translation.z
+                    self.objs[-1].transformation.translation.z == self.objs[0].transformation.translation.z
 
+                    print("perdu")
+                    
                 for obj in self.objs:
                     GL.glUseProgram(obj.program)
                     if isinstance(obj, Object3D):
@@ -126,7 +134,7 @@ class ViewerGL:
             # time.sleep(0.5)
             # for i in range(td):
             #     self.objs[0].transformation.translation -= \
-            #         pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.001, 0]))
+                    # pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.001, 0]))
             self.objs[0].transformation.translation += \
                  pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0.25, 0]))
         if glfw.KEY_DOWN in self.touch and self.touch[glfw.KEY_DOWN] > 0 and self.objs[0].transformation.translation.y >1: # descendre
@@ -161,8 +169,12 @@ class ViewerGL:
             self.cam.transformation.rotation_euler[pyrr.euler.index().yaw] += 0.1
 
         # movement du personnage vers l'avant
-        # self.objs[0].transformation.translation += \
-        #     pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.1]))
+        if time.time() - self.time > 1: # permet de compter une seconde
+            self.time = time.time()
+            self.dz += 0.01 # augmente la vitesse de déplacement vers l'avant de 0.01
+        self.objs[0].transformation.translation += \
+            pyrr.matrix33.apply_to_vector(pyrr.matrix33.create_from_eulers(self.objs[0].transformation.rotation_euler), pyrr.Vector3([0, 0, 0.25 + self.dz]))
+
     def camera(self): 
         # gestion de la caméra
         self.cam.transformation.rotation_euler = self.objs[0].transformation.rotation_euler.copy() 
@@ -192,18 +204,19 @@ class ViewerGL:
     def obstacle(self):
         #movement obstacle
         for i in range(241,246):
-            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 25:
+            if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z > 5:
+                #nouvelle position sur z
                 mz = random.randint(-1, 1)
                 if self.objs[i].transformation.translation.z + mz != self.objs[i-1].transformation.translation.z:
-                    self.objs[i].transformation.translation.z += 50 + random.randint(-1, 1)
-
+                    self.objs[i].transformation.translation.z += 50 + random.randint(-5, 0)
+                #nouvelle position sur y
                 if 0 < self.objs[i].transformation.translation.y < 4 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
                     self.objs[i].transformation.translation.y += random.randint(-1, 1)
                 elif self.objs[i].transformation.translation.y == 4 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
-                   self.objs[i].transformation.translation.y += -random.randint(0, 5)
+                   self.objs[i].transformation.translation.y += -random.randint(0, 4)
                 elif self.objs[i].transformation.translation.y == 0 and self.objs[i].transformation.translation.y != self.objs[i-1].transformation.translation.y:
-                    self.objs[i].transformation.translation.y += random.randint(0, 5)
-                   
+                    self.objs[i].transformation.translation.y += random.randint(0, 4)
+                #nouvelle position sur x         
                 if -3 < self.objs[i].transformation.translation.x < 3 and self.objs[i].transformation.translation.x != self.objs[i-1].transformation.translation.x:
                     self.objs[i].transformation.translation.x += random.randint(-1, 1)
                 elif self.objs[i].transformation.translation.x == 3 and self.objs[i].transformation.translation.x != self.objs[i-1].transformation.translation.x:
@@ -213,16 +226,20 @@ class ViewerGL:
                    
         #collision obstacle
         for i in range(241,246):
+
+        # print(self.objs[0].transformation.translation.x)
+        # print(self.objs[0].transformation.translation.y)
+        # print(self.objs[0].transformation.translation.z)
             if self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z+2>=0 and self.objs[0].transformation.translation.z - self.objs[i].transformation.translation.z+2 <= 0.3 :
                 if self.objs[i].transformation.translation.x-1.5 < self.objs[0].transformation.translation.x < self.objs[i].transformation.translation.x+1.5:
                     if self.objs[i].transformation.translation.y-2<self.objs[0].transformation.translation.y<self.objs[i].transformation.translation.y+2:
                         self.objs[0].transformation.translation.z = self.objs[i].transformation.translation.z-2
                         self.game=False
-                        # print('avant',self.go)
-                        # self.go +=1
-                        # print('apres',self.go)
+                        print('avant',self.go)
+                        self.go +=1
+                        print('apres',self.go)
         
-    # def GameOver(self):
-    #     print(self.go,'fonction game over')
-    #     if self.go>=50:
-    #         self.game = False
+    def GameOver(self):
+        # print(self.go,'fonction game over')
+        if self.go>=50:
+            self.game = True
