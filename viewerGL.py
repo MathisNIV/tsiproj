@@ -7,9 +7,7 @@ import numpy as np
 import time
 import random as random
 import glutils
-from mesh import Mesh
 from cpe3d import Object3D, Camera, Transformation3D, Text
-
 class ViewerGL:
     def __init__(self):
         # initialisation de la librairie GLFW
@@ -45,7 +43,8 @@ class ViewerGL:
     def run(self,viewer,programGUI_id):
         # boucle d'affichage
         self.time = time.time()
-
+        vao = Text.initalize_geometry()
+        texture = glutils.load_texture('fontB.jpg')
         while not glfw.window_should_close(self.window):
                 # nettoyage de la fenêtre : fond et profondeur
                 GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
@@ -57,9 +56,7 @@ class ViewerGL:
                     self.obstacle()
                     self.GameOver()
                     
-                else:
-                    vao = Text.initalize_geometry()
-                    texture = glutils.load_texture('fontB.jpg')
+                else:    
                     o = Text('game', np.array([-0.8, 0.3], np.float32), np.array([0.8, 0.8], np.float32), vao, 2, programGUI_id, texture)
                     viewer.add_object_go(o)
                     o = Text('over', np.array([-0.5, -0.2], np.float32), np.array([0.5, 0.3], np.float32), vao, 2, programGUI_id, texture)
